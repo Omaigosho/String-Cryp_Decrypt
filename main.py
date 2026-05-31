@@ -1,5 +1,5 @@
 from itertools import zip_longest
-from utils.matrixLogic import multMatrix, det, inverse, matInverse
+from utils import matrixLogic
 
 
 def dictionaries():
@@ -72,7 +72,7 @@ def restructureText(list):
 
 def main():
     A = [[2, 5], [1, 3]]
-    A_inv = matInverse(A)
+    A_inv = matrixLogic.matInverse(A)
 
     # La matriz inversa esperada en Z_29:
     # adj = [[3, -5], [-1, 2]]
