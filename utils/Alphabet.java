@@ -57,44 +57,52 @@ public class Alphabet {
         return new Dictionaries(numToChar, charToNums);
     }
 
-    public static List<List<Integer>> segment(String text, int n) {
+    public static int[][] segment(String text, int n) {
         text = text.toUpperCase();
         Dictionaries dicts = dictionaries();
         Map<String, Integer> chars = dicts.charToNums;
         
-        StringBuilder newText = new StringBuilder();
-        for (int i = 0; i < text.length(); i++) {
-            String c = String.valueOf(text.charAt(i));
-            if (chars.containsKey(c)) {
-                newText.append(c);
+        ArrayList<Integer> textNums = new ArrayList<>();
+        for(int x = 0; x< text.length(); x++){
+            char txtChar  = text.charAt(x);
+            String key = String.valueOf(txtChar);
+
+            if (chars.containsKey(key)){
+                textNums.add(chars.get(key));
             }
         }
 
-        List<Integer> textNums = new ArrayList<>();
-        for (int i = 0; i < newText.length(); i++) {
-            textNums.add(chars.get(String.valueOf(newText.charAt(i))));
+        int total = textNums.size();
+        int rows = total / n;
+
+        if (total % n != 0){
+            rows++;
         }
 
-        List<List<Integer>> segmentedList = new ArrayList<>();
-        for (int i = 0; i < textNums.size(); i += n) {
-            List<Integer> segment = new ArrayList<>();
-            for (int j = 0; j < n; j++) {
-                if (i + j < textNums.size()) {
-                    segment.add(textNums.get(i + j));
-                } else {
-                    segment.add(28); // fillvalue=28
+        int[][] segmentedList = new int[rows][n];
+
+
+        int idx = 0;
+        for(int i = 0; i<rows;i++){
+            for(int j = 0; j<n; j++){
+                if (idx<total){
+                    segmentedList[i][j] = textNums.get(idx);
+                    idx++;
+                } else{
+                    //28 = ' '
+                    segmentedList[i][j] = 28;
                 }
             }
-            segmentedList.add(segment);
         }
+
         return segmentedList;
     }
 
-    public static String restructureText(List<List<Integer>> list) {
+    public static String restructureText(int[][] list) {
         Dictionaries dicts = dictionaries();
         Map<Integer, String> numsMap = dicts.numToChar;
         StringBuilder charsNew = new StringBuilder();
-        for (List<Integer> ls : list) {
+        for (int[] ls : list) {
             for (Integer num : ls) {
                 charsNew.append(numsMap.get(num));
             }

@@ -122,4 +122,31 @@ public class MatrixLogic {
         }
         return adjTrans;
     }
+
+     public static String cypher(String text, int[][] base, int n) {
+        int[][] segmentedText = Alphabet.segment(text, n);
+        int[][] cypherText = new int[segmentedText.length][n];
+
+        int row = 0;
+        for (int[] item : segmentedText) {
+            int[] cypherVectorArr = MatrixLogic.multMatrix(base, item);
+            cypherText[row] = cypherVectorArr;
+            row++;
+        }
+        return Alphabet.restructureText(cypherText);
+    }
+
+    public static String decypher(String text, int[][] base, int n) {
+        int[][] segmentedText = Alphabet.segment(text, n);
+        int[][] matInv = MatrixLogic.matInverse(base);
+        int[][] deCypherText = new int[segmentedText.length][n];
+
+        int row = 0;
+        for (int[] item : segmentedText) {
+            int[] cypherVectorArr = MatrixLogic.multMatrix(matInv, item);
+            deCypherText[row] = cypherVectorArr;
+            row++;
+        }
+        return Alphabet.restructureText(deCypherText);
+    }
 }
