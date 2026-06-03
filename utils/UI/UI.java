@@ -13,8 +13,7 @@ public class UI {
         System.out.println("2. Descifrar");
         System.out.println("3. Matriz aleatoria cuadrada");
         System.out.println("4. Verificar inverso de matriz");
-        System.out.println("5. Buscar inversa");
-        System.out.println("6. Salir");
+        System.out.println("5. Salir");
         System.out.println("/////////////////////////////////");
     }
 
@@ -46,7 +45,7 @@ public class UI {
 
         System.out.println();
         for(int x = 0; x<matrix.length;x++){
-            System.out.println(" |");
+            System.out.print(" |");
             for(int y = 0; y<matrix[x].length;y++){
                 System.out.printf("%2d", matrix[x][y]);
             }
@@ -80,6 +79,7 @@ public class UI {
 
                     if (clave == null){
                         System.out.println("Matriz de cifrado vacia");
+                        System.out.println("INGRESE LA DIMENSION DE LA MATRIZ");
                         dim = sc.nextInt();
                         sc.nextLine();
                         clave = matrixCells(sc, dim);
@@ -88,7 +88,6 @@ public class UI {
                     matrixShow(clave);
 
                     int det = MatrixLogic.det(clave);
-                    int invDet = MatrixLogic.inverse(det);
 
                     if (det == 0){
                         System.out.println("DETERMINANTE = 0, NO EXISTE MATRIZ INVERSA");
@@ -97,8 +96,8 @@ public class UI {
 
                     System.out.println("INGRESA EL TEXTO QUE QUIERES CIFRAR: ");
                     String text = sc.nextLine();
-                    String textCypher = MatrixLogic.cypher(text, clave, invDet);
-                    System.out.println("TEXTO CIFRADO: "+ textCypher);
+                    String textCypher = MatrixLogic.cypher(text, clave);
+                    System.out.println("TEXTO CIFRADO: \""+ textCypher + "\"");
                     break;
                 case 2:
                     System.out.println("\n------DECYPHER DE TEXTO------");
@@ -114,17 +113,16 @@ public class UI {
                     matrixShow(clave);
 
                     int detDec = MatrixLogic.det(clave);
-                    int invDetDec = MatrixLogic.inverse(detDec);
 
                     if (detDec == 0){
                         System.out.println("DETERMINANTE = 0, NO EXISTE MATRIZ INVERSA");
                         clave = null;
                     }
 
-                    System.out.println("INGRESA EL TEXTO QUE QUIERES CIFRAR: ");
+                    System.out.println("INGRESA EL TEXTO QUE QUIERES DESCIFRAR: ");
                     String textDec = sc.nextLine();
-                    String textDecypher = MatrixLogic.decypher(textDec, clave, invDetDec);
-                    System.out.println("TEXTO DESCIFRADO: "+ textDecypher);
+                    String textDecypher = MatrixLogic.decypher(textDec, clave);
+                    System.out.println("TEXTO DESCIFRADO: \""+ textDecypher + "\"");
                     break;
                 case 3:
                     System.out.println("\n------MATRIZ RANDOM------");
@@ -158,10 +156,8 @@ public class UI {
                     }
                     break;
                 case 5:
-                    System.out.println("\n------INVERSO DE DETERMINANTE EN Z_29------");
-                    break;
-                case 6:
                     System.out.println("\n----------SALIENDO DEL PROGRAMA...---------");
+                    System.exit(0);
                     break;
                 default:
                     System.out.println("\n/////////OPCION ERRONEA, INTENTE DE NUEVO//////////");

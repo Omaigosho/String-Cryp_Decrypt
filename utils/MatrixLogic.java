@@ -123,7 +123,9 @@ public class MatrixLogic {
         return adjTrans;
     }
 
-     public static String cypher(String text, int[][] base, int n) {
+     public static String cypher(String text, int[][] base) {
+        int n = base.length; 
+    
         int[][] segmentedText = Alphabet.segment(text, n);
         int[][] cypherText = new int[segmentedText.length][n];
 
@@ -136,7 +138,8 @@ public class MatrixLogic {
         return Alphabet.restructureText(cypherText);
     }
 
-    public static String decypher(String text, int[][] base, int n) {
+    public static String decypher(String text, int[][] base) {
+        int n = base.length; 
         int[][] segmentedText = Alphabet.segment(text, n);
         int[][] matInv = MatrixLogic.matInverse(base);
         int[][] deCypherText = new int[segmentedText.length][n];
@@ -145,6 +148,7 @@ public class MatrixLogic {
         for (int[] item : segmentedText) {
             int[] cypherVectorArr = MatrixLogic.multMatrix(matInv, item);
             deCypherText[row] = cypherVectorArr;
+            System.out.println(java.util.Arrays.toString(cypherVectorArr));
             row++;
         }
         return Alphabet.restructureText(deCypherText);
