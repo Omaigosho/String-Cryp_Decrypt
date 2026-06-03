@@ -16,10 +16,66 @@ public class MatrixLogic {
         return resVector;
     }
 
+    public static int[][] submatrix(int[][] matrix, int row, int col){
+        int len = matrix.length;
+        int[][] submatrix = new int[len-1][len-1];
+        ////////////
+        int countI = 0;
+        for (int i = 0; i<matrix.length; i++){
+            if(i == row){
+                continue;
+            }
+            int countJ = 0;
+            for (int j = 0; j<matrix[i].length; j++){
+                if(j == col){
+                    continue;
+                }
+                submatrix[countI][countJ] = matrix[i][j];
+                countJ++;
+            }
+            countI++;
+        }
+        //////////// 
+        return submatrix;
+    }
+
     // determinante de la matriz
     public static int det(int[][] matrix) {
-        int determinant = (matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0]);
+        int len = matrix.length;
+
+        if  (len == 1 ){
+            return Math.floorMod(matrix[0][0], 29);
+        }
+
+        if (len == 2){
+            int determinant = (matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0]);
         return Math.floorMod(determinant, 29);
+        }
+
+        int total = 0;
+
+        for (int y = 0; y<len; y++){
+            int[][] sub = submatrix(matrix, 0, y);
+            int detSub = det(sub);
+
+            int sign = 0;
+            int mod = Math.floorMod(y, 2);
+            switch (mod) {
+                case 0:
+                    sign = 1;
+                    break;
+                default:
+                    sign = -1;
+                    break;
+            }
+
+            int prod = sign*detSub*matrix[0][y];
+            total = total + prod;
+        }
+
+
+        return Math.floorMod(total, 29);
+        
     }
 
     // inverso del determinante
@@ -35,18 +91,35 @@ public class MatrixLogic {
 
     // inverso de la matriz
     public static int[][] matInverse(int[][] matrix) {
-        int a = matrix[0][0];
-        int b = matrix[0][1];
-        int c = matrix[1][0];
-        int d = matrix[1][1];
+       int len = matrix.length;
+       int[][] adjTrans = new int[len][len];
 
-        int[][] adj = {{d, -b}, {-c, a}};
-        int detInv = inverse(det(matrix));
-        for (int x = 0; x < adj.length; x++) {
-            for (int y = 0; y < adj[x].length; y++) {
-                adj[x][y] = Math.floorMod(adj[x][y] * detInv, 29);
-            }
+       int det = det(matrix);
+       int detInv = inverse(det);
+
+       //cofactors
+        for(int x = 0; x<len;x++){
+            for(int y = 0; y<len;y++){
+                int[][] sub = submatrix(matrix, x, y);
+                int detSub = det(sub);
+
+
+                int sign = 0;
+                int mod = Math.floorMod(x+y, 2);
+                switch (mod) {
+                    case 0:
+                        sign = 1;
+                        break;
+                    default:
+                        sign = -1;
+                        break;
+                }
+
+                int cof = Math.floorMod(sign * detSub, 29);
+                adjTrans[y][x] = Math.floorMod(cof*detInv, 29);
+
         }
-        return adj;
+        }
+        return adjTrans;
     }
 }
